@@ -1,10 +1,51 @@
 /* style body */
 
+header{
+    
+    margin: auto 0;
+    width: 100%;
+    border: 5px;
+    border-style: ridge;
+    border-color: lightseagreen;
+    font-weight: bold;
+}
+
+.quizTitle{
+    text-align: center;
+}
+
 /* style quiz */
+.mainCont{
+    text-align: center;
+    margin: 50px auto;
+    padding-right: 50px;
+    padding-left: 50px;
+    
+}
 
+#sectionTopic, 
+#lineOne, 
+#lineTwo,
+#lineThree,
+#lineFour{
+    padding-top: 5px;
+    padding-right: 50px;
+    padding-left: 50px;
+    padding-bottom: 5px;
+}
 /* style timer */
+.timer{
+    text-align: right;
+    margin: auto 0;
+}
 
-/* style return link */
+.countdown,
+.scoreLink{
+    text-align: left;
+    margin: auto 0;
+}
+
+/* style score link */
 
 footer{
     border-top-style: solid;

@@ -10,27 +10,68 @@
 </head>
 <body>
     
-
-    <main class = "container">
+    <header>
         <section class = "row">
-            <article class = "col-md-2">
-                <!-- retake quiz option link, top left -->
+            <article class = "col-md-2 scoreLink">
+                <!-- view high scores, top left -->
+                <p id = "toScores"></p>
             </article>
-            <article class = "col-md-8">
+            <article class = "col-md-7 quizTitle">
                 <h1> QUIZ TIME </h1>
             </article>
-            <article class = "col-md-2">
+            <article class = "col-md-2 timer">
                 <!-- quiz timer, top right -->
+                <p> Time left : </p>
             </article>
+            <article class = "col-md-1 countdown">
+                <p id = "timeLeft"> 70 </p>
+            </article>
+    </header>
+
+    <main class = "container mainCont">
         </section>
         <section class = "row">
             <article class = "col-md-2">
                 <!-- general free space, ads, images, etc -->
             </article>
-            <article class = "col-md-8">
+            <article class = "col-md-7">
                 <!-- question + answers section. list style? form? nested multi-row paragraphs?-->
+                <section class = "row">
+                    <article class = "col-md-12">
+                        <!-- heading -->
+                        <h2 id = "sectionTopic"> </h2>
+                    </article>
+                </section>
+                <section class = "row">
+                    <article class = "col-md-12">
+                        <!-- p1 -->
+                        <p id = "lineOne"> 
+                        </p>
+                    </article>
+                </section>
+                <section class = "row">
+                    <article class = "col-md-12">
+                        <!-- p2 -->
+                        <p id = "lineTwo">
+                        </p>
+                    </article>
+                </section>
+                <section class = "row">
+                    <article class = "col-md-12">
+                        <!-- p3 -->
+                        <p id = "lineThree">
+                        </p>
+                    </article>
+                </section>
+                <section class = "row">
+                    <article class = "col-md-12">
+                        <!-- p4 -->
+                        <p id = "lineFour">
+                        </p>
+                    </article>
+                </section>
             </article>
-            <article class = "col-md-2">
+            <article class = "col-md-3">
                 <!-- general free space, ads, images, etc -->
             </article>
         </section>
