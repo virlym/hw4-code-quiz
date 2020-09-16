@@ -128,6 +128,7 @@ function initialize(){
     questOne.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds.";
     countdown.textContent = secondsLeft;
     jumpToBoard.textContent = "Check scoreboard";
+    jumpToBoard.setAttribute("onclick", "displayScore()");
 
 
     var startButton = document.createElement("button");
@@ -141,6 +142,8 @@ function initialize(){
 }
 
 function clearContent(){
+    
+    jumpToBoard.textContent = "";
     sectionTitle.textContent = "";
     questOne.textContent = "";
     questTwo.textContent = "";
@@ -185,7 +188,6 @@ function quizStart(){
 }
 
 function checkAnswerSelect(selected){
-    console.log("entered selector click check");
     var verify = "";
     clearContent();
     if(selected === 1){
@@ -203,13 +205,11 @@ function checkAnswerSelect(selected){
 
     if(verify === "true"){
         questFive.textContent = "~~ Correct ~~";
-        console.log("entered correct");
         clearResult = 3;
     }
     else{
         questFive.textContent = "!! Wrong !!";
         secondsLeft = secondsLeft - 10;
-        console.log("entered false");
         clearResult = 3;
     }
 
@@ -223,21 +223,16 @@ function checkAnswerSelect(selected){
 }
 
 function sortLeaders(){
-    console.log("sorting leaders");
     if(leaders){
         for(var i = 0; i < leaders.length - 1; i++){
             for(var j = 0; j < leaders.length - 1; j++){
                 if(leaders[j].score < leaders[j+1].score){
-                    console.log(`swapping ${leaders[j].winner} and ${leaders[j+1].winner}`);
-                    console.log(`swapping ${leaders[j].score} and ${leaders[j+1].score}`);
                     var tempScore = leaders[j].score;
                     var tempName = leaders[j].winner;
                     leaders[j].score = leaders[j+1].score;
                     leaders[j].winner = leaders[j+1].winner;
                     leaders[j+1].score = tempScore;
                     leaders[j+1].winner = tempName;
-                    console.log(`result ${leaders[j].winner} and ${leaders[j+1].winner}`);
-                    console.log(`result ${leaders[j].score} and ${leaders[j+1].score}`);
                 }
             }
         }
@@ -281,7 +276,6 @@ function displayScore(){
 }
 
 function deleteLastScore(){
-    console.log("deleting a score");
     leaders.pop();
 }
 
@@ -300,6 +294,7 @@ function storeScores(){
 
 function clearScores(){
     localStorage.clear();
+    localStorage.removeItem('Player');
     var loop = leaders.length;
     for(var i = 0; i < loop; i++){
         deleteLastScore();
@@ -309,6 +304,7 @@ function clearScores(){
 
 function addScore(){
     sectionTitle.textContent = "Enter your name";
+    questOne.textContent = "You score : " + secondsLeft;
     var nameForm = document.createElement("form");
     nameForm.setAttribute("method", "POST");
     nameForm.addEventListener("submit", addWinner);
@@ -318,12 +314,11 @@ function addScore(){
     nameField.setAttribute("name", "winner-text");
     nameField.setAttribute("id", "winner-text");
     nameForm.appendChild(nameField);
-    questOne.appendChild(nameForm);
+    questTwo.appendChild(nameForm);
 }
 
 function addWinner(event){
     event.preventDefault();
-    console.log("name return");
     fieldText = document.querySelector("#winner-text");
     if(fieldText.value.trim() === ""){
         return;
@@ -331,14 +326,6 @@ function addWinner(event){
     else{
         getStored();
         leaders.push({winner: fieldText.value.trim(), score : secondsLeft});
-        leaders.push({winner: "placeholder", score: 1});
-        leaders.push({winner: "placeholder", score: 1});
-        leaders.push({winner: "placeholder", score: 1});
-        leaders.push({winner: "placeholder", score: 1});
-        leaders.push({winner: "placeholder", score: 1});
-        leaders.push({winner: "placeholder", score: 1});
-        leaders.push({winner: "placeholder", score: 1});
-        leaders.push({winner: "placeholder", score: 1});
         storeScores();
         displayScore();
     }
