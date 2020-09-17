@@ -1,14 +1,3 @@
-/*
-    'hyperlink' retake quiz
-    set-interval timer
-    -onclick event to start quiz
-    populate questions and answers
-    onclick answer fields
-    populate scoreboard at the end
-    allow for name input for scoreboard
-    store scoreboard to local 
-
-*/
 var countdown = document.querySelector("#timeLeft");
 var sectionTitle = document.querySelector("#sectionTopic");
 var questOne = document.querySelector("#lineOne");
@@ -22,6 +11,7 @@ var clearResult = 0;
 var index = 0;
 var secondsLeft = 0;
 var leaders = [{winner: "" , score: ""}];
+// really big array for the questions/answers, sorry
 var questArray = [
 {
     question: "Commonly used data types DO NOT include : ", 
@@ -120,6 +110,7 @@ var questArray = [
 }
 ]
 
+// set the initial screen before the quiz starts
 function initialize(){
     clearContent();
     secondsLeft = 70;
@@ -141,6 +132,7 @@ function initialize(){
 
 }
 
+// clear out values for easy replace
 function clearContent(){
     
     jumpToBoard.textContent = "";
@@ -152,6 +144,7 @@ function clearContent(){
     questFive.textContent = "";
 }
 
+// get the next question and create the buttons for the 'answers'
 function createButtons(){
     sectionTitle.textContent = questArray[index].question;
 
@@ -180,6 +173,7 @@ function createButtons(){
     questFour.appendChild(fourButton);
 }
 
+// clear the screen, reset the question index, create the first question, and start the timer
 function quizStart(){
     clearContent();
     index = 0;
@@ -187,9 +181,12 @@ function quizStart(){
     timerStart();
 }
 
+// check if the pressed answer button was correct or not then pull the next section
 function checkAnswerSelect(selected){
     var verify = "";
+    // clear the screen
     clearContent();
+    // set the defined variable to the verify attribute of the selected button
     if(selected === 1){
         verify = questArray[index].answerOne.verify;
     }
@@ -203,25 +200,36 @@ function checkAnswerSelect(selected){
         verify = questArray[index].answerFour.verify;
     }
 
+    // if the answer was correct
     if(verify === "true"){
+        // tell the user they were right
         questFive.textContent = "~~ Correct ~~";
+        // set the result to go away in 3 seconds
         clearResult = 3;
     }
+    // if the answer was wrong
     else{
+        // tell the user they were wrong
         questFive.textContent = "!! Wrong !!";
+        // deduct 10 seconds from the time
         secondsLeft = secondsLeft - 10;
+        // set the result to go away in 3 seconds
         clearResult = 3;
     }
 
+    // increase the index to grab the next question
     index++;
+    // if the index is still less than 5, go to the next question
     if(index < 5){
         createButtons();
     }
+    // otherwise, go to the name entry 'screen'
     else{
         addScore();
     }
 }
 
+// sort the scores so the highest are on top (typical bubble sort)
 function sortLeaders(){
     if(leaders){
         for(var i = 0; i < leaders.length - 1; i++){
@@ -240,30 +248,39 @@ function sortLeaders(){
     }
 }
 
+// display the scoreboard 'page', create buttons to restart and clear the scores
 function displayScore(){
+    // clear the screen
     clearContent();
+    // change the section title
     sectionTitle.textContent = "Top Scores";
+    // grab the scores stored in local storage
     getStored();
+    // if there are any scores
     if(leaders){
+        // sort the scores from high to low
         sortLeaders();
+        // if there are more than 10 scores, remove the lowest until there are only 10
         if(leaders.length >= 11){
             for(var i = leaders.length; i > 10; i--){
                 deleteLastScore();
             }
         }
 
+        // print each score to the screen
         for(var i = 0; i < leaders.length; i++){
             var newDiv = document.createElement("p");
             newDiv.textContent = `${i + 1} ) ${leaders[i].winner} - Score : ${leaders[i].score}`;
             questOne.appendChild(newDiv);
         }
+        // store the current scores so they are in sorted order
         storeScores();
     }
     else{
         questOne.textContent = "something's wrong here";
     }
     var backButton = document.createElement("button");
-    backButton.textContent = "retake test";
+    backButton.textContent = "Retake Test";
     backButton.addEventListener("click", initialize);
     questTwo.appendChild(backButton);
 
@@ -275,10 +292,12 @@ function displayScore(){
     
 }
 
+// delete the last name/score
 function deleteLastScore(){
     leaders.pop();
 }
 
+// get the names/scores stored in local storage
 function getStored(){
     if(JSON.parse(localStorage.getItem("Player"))){
         if((JSON.parse(localStorage.getItem("Player")).length !== 0)){
@@ -287,71 +306,104 @@ function getStored(){
     }
 }
 
+// assign the current scores to the local storage
 function storeScores(){
     var storage = JSON.stringify(leaders);
     localStorage.setItem("Player", storage);
 }
 
+// empty the current scores and the ones stored in local storage
 function clearScores(){
+    // try so hard to clear the local storage
+    // both of these clear it completely in the Inspect tool, but leave an empty string when running with javascript
     localStorage.clear();
     localStorage.removeItem('Player');
+    // set a loop variable to make sure the changing array doesn't break the loop
     var loop = leaders.length;
+    // delete each current score in memory
     for(var i = 0; i < loop; i++){
         deleteLastScore();
     }
+    // display the scoreboard
     displayScore();
 }
 
+// name entry screen for completing the quiz
 function addScore(){
+    // change the section title
     sectionTitle.textContent = "Enter your name";
+    // show them their score, based on remaining time
     questOne.textContent = "You score : " + secondsLeft;
+    // create a form for them to add their name, adding an eventListener to it
     var nameForm = document.createElement("form");
     nameForm.setAttribute("method", "POST");
     nameForm.addEventListener("submit", addWinner);
+    // create the input text field
     var nameField = document.createElement("input");
     nameField.setAttribute("type", "text");
     nameField.setAttribute("placeholder", "Enter your name");
     nameField.setAttribute("name", "winner-text");
     nameField.setAttribute("id", "winner-text");
+    // add the field to the form
     nameForm.appendChild(nameField);
+    // add the form to the page
     questTwo.appendChild(nameForm);
 }
 
+// add the entered name and score to the list and local storage
 function addWinner(event){
     event.preventDefault();
+    // grab the text input for the winner's name
     fieldText = document.querySelector("#winner-text");
+    // if the text field is empty, don't do anything
     if(fieldText.value.trim() === ""){
         return;
     }
+    // if there is text in the field
     else{
+        // grab the stored scores
         getStored();
+        // add the new score to the list
         leaders.push({winner: fieldText.value.trim(), score : secondsLeft});
+        // store the current scores
         storeScores();
+        // display the scoreboard
         displayScore();
     }
 }
 
+// countdown timer, with a quick refresh rate
 function timerStart(){
-    // Create the countdown timer.
-    
     var speed = 0;
     var timerInterval = setInterval(function() {
+        // an check for the seconds
         if(speed % 1000 === 0){
             secondsLeft--;
             speed = 0;
             clearResult--;
+            // clear the correct/wrong notice after 3 seconds if it's still on the screen
             if(clearResult === 0){
                 questFive.textContent = "";
             }
         }
 
+        // refresh timer number
         countdown.textContent = secondsLeft;
+
+        // when the quiz is over
         if(secondsLeft <= 0 || index === 5) {
+            // stop the timer
             clearInterval(timerInterval);
+            // if they ran out of time, don't let them set their score
             if(secondsLeft <= 0){
                 clearContent();
                 sectionTitle.textContent = "Out of time";
+                // wait 5 seconds before loading the scoreboard
+                setTimeout(function() {
+                    displayScore();
+                }, 5000);
             }
+            // clear the correct/wrong notice after 3 seconds
             setTimeout(function() {
                 questFive.textContent = "";
             }, 3000);
