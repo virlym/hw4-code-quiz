@@ -16,4 +16,4 @@ deployed page : https://virlym.github.io/hw4-code-quiz/
 Preview:
 
 ![quizStart](https://github.com/virlym/hw4-code-quiz/blob/master/Assets/quizStart.PNG)
-![quizEnd](https://github.com/virlym/hw3-password-generator/blob/master/Assets/quizEnd.PNG)
+![quizEnd](https://github.com/virlym/hw4-code-quiz/blob/master/Assets/quizEnd.PNG)
